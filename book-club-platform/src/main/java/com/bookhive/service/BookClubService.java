@@ -14,7 +14,6 @@ import com.bookhive.dto.club.BookClubDto;
 import com.bookhive.dto.club.BookClubResponseDto;
 import com.bookhive.entity.BookClub;
 import com.bookhive.entity.User;
-import com.bookhive.projection.BookClubProjection;
 import com.bookhive.repository.BookClubRepository;
 import com.bookhive.repository.UserRepository;
 
@@ -80,11 +79,7 @@ public class BookClubService {
 
     // Get BookClub by ID
     public BookClubResponseDto getBookClubById(Long id) {
-        String message = messageSource.getMessage(
-                "book.club.not.found",
-                new Object[] { id },
-                BOOK_CLUB_NOT_FOUND_WITH_ID+ id, // Default message
-                Locale.getDefault());
+        String message = getBookClubByIdMessage(id);
         BookClub bookClub = bookClubRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(message));
 
@@ -97,22 +92,22 @@ public class BookClubService {
                 .build();
     }
 
-    // Update BookClub
-    public BookClub updateBookClub(Long id, BookClub updatedBookClub) {
-        BookClub existingBookClub = bookClubRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("BookClub not found with ID: " + id));
-
-        existingBookClub.setName(updatedBookClub.getName());
-        existingBookClub.setDescription(updatedBookClub.getDescription());
-        return bookClubRepository.save(existingBookClub);
+    private String getBookClubByIdMessage(Long id) {
+        String message = messageSource.getMessage(
+                "book.club.not.found",
+                new Object[] { id },
+                BOOK_CLUB_NOT_FOUND_WITH_ID+ id, // Default message
+                Locale.getDefault());
+        return message;
     }
 
     // Delete BookClub
     public void deleteBookClub(Long id) {
+        String message = getBookClubByIdMessage(id);
         if (bookClubRepository.existsById(id)) {
             bookClubRepository.deleteById(id);
         } else {
-            throw new RuntimeException("BookClub not found with ID: " + id);
+            throw new EntityNotFoundException(message);
         }
     }
 }
