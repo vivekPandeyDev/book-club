@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -20,5 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Cacheable(value = "followers", key = "#userId")
     @Query("SELECT f.follower.id AS id, f.follower.username AS username FROM Follow f WHERE f.following.id = :userId")
     List<UserProjection> findFollowersByUserId(Long userId, Pageable pageable);
+
+    Optional<User> findUserByUsername(String userName);
 }
 

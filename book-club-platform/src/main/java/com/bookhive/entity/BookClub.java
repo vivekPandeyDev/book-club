@@ -15,15 +15,15 @@ public class BookClub {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long clubId;
-
+    @Column(nullable = false,unique = true)
     private String name;
     private String description;
     
     @ManyToOne
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner_id",nullable = false)
     private User owner;
 
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "bookClub", cascade = CascadeType.ALL)
     private List<Membership> memberships;

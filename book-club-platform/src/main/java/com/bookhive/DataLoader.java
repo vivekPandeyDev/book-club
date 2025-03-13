@@ -12,6 +12,8 @@ import java.util.List;
 @Component
 public class DataLoader {
 
+
+
     @Bean
     CommandLineRunner loadData(UserRepository userRepository,
                                BookRepository bookRepository,
@@ -21,6 +23,9 @@ public class DataLoader {
                                CommentRepository commentRepository) {
         return args -> {
 
+            if(userRepository.findUserByUsername("john_doe").isPresent()){
+                return;
+            }
             // Create Users
             User user1 = new User();
             user1.setUsername("john_doe");
@@ -49,7 +54,7 @@ public class DataLoader {
             BookClub bookClub = new BookClub();
             bookClub.setName("Philosophy Readers");
             bookClub.setDescription("Discussing philosophical books");
-
+            bookClub.setOwner(user2);
             bookClubRepository.save(bookClub);
 
             // Create Membership

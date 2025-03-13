@@ -25,4 +25,6 @@ public interface BookClubRepository extends JpaRepository<BookClub, Long> {
     // Get book club by ID with projection
     @Query("SELECT b FROM BookClub b WHERE b.id = :id")
     Optional<BookClubProjection> findProjectedById(@Param("id") Long id);
+
+    boolean existsByName(String name);
 }
