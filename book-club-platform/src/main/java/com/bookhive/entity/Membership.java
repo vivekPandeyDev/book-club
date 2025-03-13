@@ -17,11 +17,11 @@ public class Membership {
     private Long membershipId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id",nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "club_id")
+    @JoinColumn(name = "club_id",nullable = false)
     private BookClub bookClub;
 
     private String role;
