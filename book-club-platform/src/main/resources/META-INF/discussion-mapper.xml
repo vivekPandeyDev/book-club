@@ -1,0 +1,12 @@
+<mapper namespace="com.bookhive.repository.DiscussionRepository">
+
+    <!-- Find all Discussions by Book ID with Pagination -->
+    <select id="findDiscussionsByBookId" resultType="com.bookhive.projection.DiscussionProjection">
+        SELECT d.id AS id, d.title AS title, d.created_at AS createdAt
+        FROM discussion d
+        JOIN book_discussion bd ON d.id = bd.discussion_id
+        WHERE bd.book_id = #{bookId}
+        ORDER BY ${sortField} ${sortDirection}
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+</mapper>

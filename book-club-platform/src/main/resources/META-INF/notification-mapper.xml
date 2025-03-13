@@ -1,0 +1,11 @@
+<mapper namespace="com.bookhive.repository.NotificationRepository">
+
+    <!-- Get notifications for a user -->
+    <select id="findNotificationsByUserId" resultType="com.bookhive.projection.NotificationProjection">
+        SELECT n.id AS id, n.message AS message, n.is_read AS isRead
+        FROM notification n
+        WHERE n.user_id = #{userId}
+        ORDER BY n.created_at DESC
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+</mapper>

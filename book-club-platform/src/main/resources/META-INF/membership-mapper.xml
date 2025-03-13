@@ -1,0 +1,12 @@
+<mapper namespace="com.bookhive.repository.MembershipRepository">
+
+    <!-- Find all BookClubs for a given User -->
+    <select id="findBookClubsByUserId" resultType="com.bookhive.projection.BookClubProjection">
+        SELECT bc.id AS id, bc.name AS name, bc.description AS description
+        FROM membership m
+        JOIN book_club bc ON m.book_club_id = bc.id
+        WHERE m.user_id = #{userId}
+        ORDER BY ${sortField} ${sortDirection}
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+</mapper>

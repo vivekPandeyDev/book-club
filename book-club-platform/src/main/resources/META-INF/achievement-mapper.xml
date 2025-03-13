@@ -1,0 +1,11 @@
+<mapper namespace="com.bookhive.repository.AchievementRepository">
+
+    <!-- Get Achievements for a User -->
+    <select id="findAchievementsByUserId" resultType="com.bookhive.projection.AchievementProjection">
+        SELECT a.id AS id, a.name AS name, a.date_awarded AS dateAwarded
+        FROM achievement a
+        WHERE a.user_id = #{userId}
+        ORDER BY ${sortField} ${sortDirection}
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+</mapper>

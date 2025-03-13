@@ -1,0 +1,11 @@
+<mapper namespace="com.bookhive.repository.ReviewRepository">
+
+    <!-- Get reviews for a book -->
+    <select id="findReviewsByBookId" resultType="com.bookhive.projection.ReviewProjection">
+        SELECT r.id AS id, r.rating AS rating, r.comment AS comment
+        FROM review r
+        WHERE r.book_id = #{bookId}
+        ORDER BY ${sortField} ${sortDirection}
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+</mapper>

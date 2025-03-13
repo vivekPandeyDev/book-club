@@ -1,0 +1,12 @@
+<mapper namespace="com.bookhive.repository.FollowRepository">
+
+    <!-- Get followers for a user -->
+    <select id="findFollowersByUserId" resultType="com.bookhive.projection.UserProjection">
+        SELECT u.id AS id, u.username AS username
+        FROM follow f
+        JOIN user u ON f.follower_id = u.id
+        WHERE f.user_id = #{userId}
+        ORDER BY ${sortField} ${sortDirection}
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+</mapper>

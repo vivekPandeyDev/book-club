@@ -1,0 +1,11 @@
+<mapper namespace="com.bookhive.repository.CommentRepository">
+
+    <!-- Find all comments for a discussion -->
+    <select id="findCommentsByDiscussionId" resultType="com.bookhive.projection.CommentProjection">
+        SELECT c.id AS id, c.text AS text, c.created_at AS createdAt
+        FROM comment c
+        WHERE c.discussion_id = #{discussionId}
+        ORDER BY ${sortField} ${sortDirection}
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+</mapper>

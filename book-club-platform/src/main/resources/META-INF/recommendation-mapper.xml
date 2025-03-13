@@ -1,0 +1,12 @@
+<mapper namespace="com.bookhive.repository.RecommendationRepository">
+
+    <!-- Get Recommended Books for a User -->
+    <select id="findRecommendedBooksByUserId" resultType="com.bookhive.projection.BookProjection">
+        SELECT b.id AS id, b.title AS title, b.author AS author
+        FROM recommendation r
+        JOIN book b ON r.book_id = b.id
+        WHERE r.user_id = #{userId}
+        ORDER BY ${sortField} ${sortDirection}
+        LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+</mapper>
