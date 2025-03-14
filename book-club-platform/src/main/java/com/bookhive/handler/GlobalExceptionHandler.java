@@ -14,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -68,6 +69,21 @@ public class GlobalExceptionHandler {
         @ExceptionHandler(EntityNotFoundException.class)
         public ResponseEntity<Map<String, Object>> handleEntityNotFoundException(EntityNotFoundException ex,
                         HttpServletRequest request) {
+                Map<String, Object> errorDetails = new HashMap<>();
+                errorDetails.put("status", HttpStatus.NOT_FOUND.value());
+                errorDetails.put("error", HttpStatus.NOT_FOUND.getReasonPhrase());
+                errorDetails.put("message", ex.getMessage());
+                errorDetails.put("path", request.getRequestURI());
+                errorDetails.put("timestamp", LocalDateTime.now());
+
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDetails);
+        }
+
+        @ExceptionHandler(NoResourceFoundException.class)
+        public ResponseEntity<Map<String, Object>> handleNoResourceFoundException(
+                        NoResourceFoundException ex,
+                        HttpServletRequest request) {
+
                 Map<String, Object> errorDetails = new HashMap<>();
                 errorDetails.put("status", HttpStatus.NOT_FOUND.value());
                 errorDetails.put("error", HttpStatus.NOT_FOUND.getReasonPhrase());

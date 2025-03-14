@@ -1,11 +1,15 @@
 package com.bookhive.service;
 
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bookhive.dto.user.UserResponseDto;
+import com.bookhive.entity.User;
 import com.bookhive.repository.UserRepository;
 import com.bookhive.util.UserMapper;
 
@@ -17,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final CacheManager cacheManager;
 
     public Page<UserResponseDto> getAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable)
@@ -44,5 +49,23 @@ public class UserService {
         }
 
         throw new IllegalArgumentException("Either id, name, or email must be provided");
+    }
+
+    @Transactional
+    @CacheEvict(value = "users", key = "#id")
+    public void deleteUserById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+
+        // Remove from cache by id, name, and email
+        var cache = cacheManager.getCache("users");
+        if (cache != null) {
+            cache.evict(user.getUserId());
+            cache.evict(user.getUsername());
+            cache.evict(user.getEmail());
+        }
+
+        userRepository.deleteById(id);
+
     }
 }
