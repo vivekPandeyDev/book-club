@@ -3,6 +3,9 @@ package com.bookhive.service;
 import java.time.LocalDateTime;
 import java.util.Locale;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +33,7 @@ public class BookClubService {
     private static final String BOOK_CLUB_ALREADY_EXIST = "Book club with this name already exists";
     private static final String BOOK_CLUB_NOT_FOUND_WITH_ID = "BookClub not found with ID: ";
     // Create BookClub
+    @CachePut(value = "bookClubs", key = "#result.clubId")
     public BookClubResponseDto createBookClub(BookClubDto bookClubDto) {
         // Check if name is already taken
         if (bookClubRepository.existsByName(bookClubDto.getName())) {
@@ -60,6 +64,7 @@ public class BookClubService {
     }
 
     // Get All BookClubs with Paging and Sorting
+    @Cacheable(value = "allBookClubs", key = "{#page, #size, #sortBy}")
     public Page<BookClubResponseDto> getAllBookClubs(int page, int size, String sortBy) {
         Pageable pageable = PageRequest.of(
                 page >= 0 ? page : 0,
@@ -78,6 +83,7 @@ public class BookClubService {
     }
 
     // Get BookClub by ID
+    @Cacheable(value = "bookClubs", key = "#id")
     public BookClubResponseDto getBookClubById(Long id) {
         String message = getBookClubByIdMessage(id);
         BookClub bookClub = bookClubRepository.findById(id)
@@ -102,6 +108,7 @@ public class BookClubService {
     }
 
     // Delete BookClub
+    @CacheEvict(value = "bookClubs", key = "#id")
     public void deleteBookClub(Long id) {
         String message = getBookClubByIdMessage(id);
         if (bookClubRepository.existsById(id)) {
