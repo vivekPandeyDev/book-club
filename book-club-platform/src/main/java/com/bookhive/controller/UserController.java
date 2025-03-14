@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bookhive.aop.RateLimited;
 import com.bookhive.dto.user.UserRequestDto;
 import com.bookhive.dto.user.UserResponseDto;
 import com.bookhive.service.UserService;
@@ -36,6 +37,7 @@ public class UserController {
     }
 
     @GetMapping("/find")
+    @RateLimited(duration = 2,limit = 1)
     public ResponseEntity<UserResponseDto> getUser(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) String name,
