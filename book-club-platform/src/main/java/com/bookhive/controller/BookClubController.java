@@ -75,9 +75,9 @@ public class BookClubController {
     // ✅ Member Management
     // ----------------------------------
 
-    @PostMapping("/{id}/members")
-    public ResponseEntity<MembershipDto> addMember(@PathVariable Long id, @RequestBody MembershipDto membershipDto) {
-        return ResponseEntity.ok(bookClubService.addMember(id, membershipDto));
+    @PostMapping("/{clubId}/members/{userId}")
+    public ResponseEntity<MembershipDto> addMember(@PathVariable Long clubId,@PathVariable Long userId) {
+        return ResponseEntity.ok(bookClubService.addMember(clubId, userId));
     }
 
     @GetMapping("/{id}/members")

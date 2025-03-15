@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bookhive.entity.Membership;
+import com.bookhive.projection.MembershipProjection;
 
 @Repository
 public interface MembershipRepository extends JpaRepository<Membership, Long> {
@@ -21,4 +22,11 @@ public interface MembershipRepository extends JpaRepository<Membership, Long> {
     @Transactional
     @Query("DELETE FROM Membership m WHERE m.bookClub.id = :clubId AND m.user.id = :userId")
     void deleteByBookClubIdAndUserId(@Param("clubId") Long clubId, @Param("userId") Long userId);
+
+    @Query("""
+        SELECT new com.bookhive.projection.MembershipProjection(m.membershipId)
+        FROM Membership m
+        WHERE m.bookClub.clubId = :clubId AND m.user.userId = :userId
+    """)
+    MembershipProjection findMembershipAndEntities(@Param("clubId") Long clubId, @Param("userId") Long userId);
 }

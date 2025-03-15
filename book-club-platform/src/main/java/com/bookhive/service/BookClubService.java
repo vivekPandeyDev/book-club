@@ -10,6 +10,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,6 +27,8 @@ import com.bookhive.dto.user.MembershipDto;
 import com.bookhive.entity.BookClub;
 import com.bookhive.entity.Membership;
 import com.bookhive.entity.User;
+import com.bookhive.handler.ResourceFoundException;
+import com.bookhive.projection.MembershipProjection;
 import com.bookhive.repository.BookClubRepository;
 import com.bookhive.repository.MembershipRepository;
 import com.bookhive.repository.UserRepository;
@@ -38,8 +41,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class BookClubService {
-
-
 
     private final BookClubRepository bookClubRepository;
     private final UserRepository userRepository;
@@ -81,11 +82,11 @@ public class BookClubService {
                 .build();
     }
 
-    private CachedPageDTO<BookClubResponseDto> getCachedResult(Cache cache,String key){
+    private CachedPageDTO<BookClubResponseDto> getCachedResult(Cache cache, String key) {
         // Try to get from cache
         try {
             if (cache != null) {
-
+                // TODO: fix type check issue
                 CachedPageDTO<BookClubResponseDto> cachedData = cache.get(key, CachedPageDTO.class);
                 if (cachedData != null) {
                     log.info("Cache hit for key: {}", key);
@@ -98,6 +99,7 @@ public class BookClubService {
         }
         return null;
     }
+
     public CachedPageDTO<BookClubResponseDto> getAllBookClubsCached(int page, int size, String sortBy) {
         page = Math.max(page, 0);
         size = Math.max(size, 10);
@@ -106,11 +108,11 @@ public class BookClubService {
         String key = page + "," + size + "," + sortBy;
         var cache = cacheManager.getCache("allBookClubs");
         // check value in cache
-        CachedPageDTO<BookClubResponseDto> cachedPageDTO =getCachedResult(cache,key);
-        if(cachedPageDTO!=null){
+        CachedPageDTO<BookClubResponseDto> cachedPageDTO = getCachedResult(cache, key);
+        if (cachedPageDTO != null) {
             return cachedPageDTO;
         }
-        Pageable pageable = PageRequest.of(page,size,Sort.by(sortBy).ascending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy).ascending());
         Page<BookClub> bookClubPage = bookClubRepository.findAll(pageable);
 
         List<BookClubResponseDto> dtoList = bookClubPage.getContent().stream()
@@ -123,9 +125,10 @@ public class BookClubService {
                         .memberCount(bookClub.getMemberships().size())
                         .build())
                 .toList();
-        
+
         // Return as CachedPageDTO instead of Page
-        CachedPageDTO<BookClubResponseDto> newCachedPageDTO = new CachedPageDTO<>(dtoList,page,size,sortBy,bookClubPage.getTotalElements());
+        CachedPageDTO<BookClubResponseDto> newCachedPageDTO = new CachedPageDTO<>(dtoList, page, size, sortBy,
+                bookClubPage.getTotalElements());
         if (cache != null) {
             cache.put(key, newCachedPageDTO);
         }
@@ -151,6 +154,7 @@ public class BookClubService {
                 .description(bookClub.getDescription())
                 .ownerName(bookClub.getOwner().getUsername())
                 .createdAt(bookClub.getCreatedAt())
+                .memberCount(bookClub.getMemberships().size())
                 .build();
     }
 
@@ -179,24 +183,34 @@ public class BookClubService {
     // -------------------------------
 
     @Transactional
-    public MembershipDto addMember(Long clubId, MembershipDto membershipDto) {
-        BookClub bookClub = bookClubRepository.findById(clubId)
-                .orElseThrow(() -> new EntityNotFoundException("Book club not found"));
+    @Caching(evict = {
+            @CacheEvict(value = "clubMembers", key = "#clubId"),
+            @CacheEvict(value = "bookClubs", key = "#clubId")
+    })
+    public MembershipDto addMember(Long clubId, Long userId) {
+        MembershipProjection membershipCheck = membershipRepository.findMembershipAndEntities(clubId, userId);
 
-        User user = userRepository.findUserByUsername(membershipDto.getUsername())
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        if (membershipCheck != null && membershipCheck.getMembershipId() != null) {
+            throw new ResourceFoundException("Cannot add new member, User is already a member of this book club");
+        }
+
+        // Use `getReferenceById()` to avoid an unnecessary SELECT query
+        BookClub bookClub = bookClubRepository.getReferenceById(clubId);
+        User user = userRepository.getReferenceById(userId);
 
         Membership membership = new Membership();
         membership.setBookClub(bookClub);
         membership.setUser(user);
-        // TODO update role
-        membership.setRole("USER");
+        membership.setRole("USER"); // Default role
+        membership.setJoinedAt(LocalDateTime.now());
+
         membership = membershipRepository.save(membership);
 
         return new MembershipDto(membership.getMembershipId(), bookClub.getName(), user.getUsername(),
                 membership.getJoinedAt());
     }
 
+    @Cacheable(value = "clubMembers", key = "#clubId")
     public List<MembershipDto> getMembers(Long clubId) {
         return membershipRepository.findMembersByClubId(clubId)
                 .stream()
@@ -206,7 +220,16 @@ public class BookClubService {
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "clubMembers", key = "#clubId"),
+            @CacheEvict(value = "bookClubs", key = "#clubId")
+    })
     public void removeMember(Long clubId, Long userId) {
+        MembershipProjection membershipCheck = membershipRepository.findMembershipAndEntities(clubId, userId);
+
+        if (membershipCheck == null || membershipCheck.getMembershipId() == null) {
+            throw new EntityNotFoundException("Cannot remove member, No memember found for given book club");
+        }
         membershipRepository.deleteByBookClubIdAndUserId(clubId, userId);
     }
 }

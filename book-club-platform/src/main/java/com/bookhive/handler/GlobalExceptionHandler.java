@@ -106,4 +106,17 @@ public class GlobalExceptionHandler {
 
                 return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(errorDetails);
         }
+
+        @ExceptionHandler(ResourceFoundException.class)
+        public ResponseEntity<Map<String, Object>> handleResourceFoundException(ResourceFoundException ex,
+                        HttpServletRequest request) {
+                Map<String, Object> errorDetails = new HashMap<>();
+                errorDetails.put("timestamp", LocalDateTime.now());
+                errorDetails.put("status", HttpStatus.FOUND.value());
+                errorDetails.put("error", HttpStatus.FOUND.getReasonPhrase());
+                errorDetails.put("message", ex.getMessage());
+                errorDetails.put("path", request.getRequestURI());
+
+                return ResponseEntity.status(HttpStatus.FOUND).body(errorDetails);
+        }
 }
