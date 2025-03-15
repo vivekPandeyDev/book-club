@@ -75,6 +75,8 @@ public class DataLoader implements CommandLineRunner {
             Book book = new Book();
             book.setTitle("The Great Gatsby");
             book.setAuthor("F. Scott Fitzgerald");
+            book.setCoverImageUrl("test ulr");
+            book.setBookUrl("test book url");
             bookRepository.save(book);
 
             // Create a Review for John

@@ -1,6 +1,7 @@
 package com.bookhive.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +13,8 @@ import com.bookhive.projection.BookProjection;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
+
+    Optional<Book> findByTitle(String title);
 
     @Query("SELECT b.id AS id, b.title AS title, b.author AS author FROM Book b")
     List<BookProjection> findAllBooks(Pageable pageable);
