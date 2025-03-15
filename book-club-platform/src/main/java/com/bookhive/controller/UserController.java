@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @GetMapping("/find")
-    @RateLimited(duration = 2,limit = 1)
+    @RateLimited(duration = 1,limit = 10)
     public ResponseEntity<UserResponseDto> getUser(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) String name,

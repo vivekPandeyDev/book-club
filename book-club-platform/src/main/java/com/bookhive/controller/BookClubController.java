@@ -1,6 +1,7 @@
 package com.bookhive.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bookhive.dto.club.BookClubDto;
 import com.bookhive.dto.club.BookClubResponseDto;
+import com.bookhive.dto.user.MembershipDto;
 import com.bookhive.service.BookClubService;
 
 import jakarta.validation.Valid;
@@ -66,6 +68,26 @@ public class BookClubController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBookClub(@PathVariable Long id) {
         bookClubService.deleteBookClub(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // ----------------------------------
+    // ✅ Member Management
+    // ----------------------------------
+
+    @PostMapping("/{id}/members")
+    public ResponseEntity<MembershipDto> addMember(@PathVariable Long id, @RequestBody MembershipDto membershipDto) {
+        return ResponseEntity.ok(bookClubService.addMember(id, membershipDto));
+    }
+
+    @GetMapping("/{id}/members")
+    public ResponseEntity<List<MembershipDto>> getMembers(@PathVariable Long id) {
+        return ResponseEntity.ok(bookClubService.getMembers(id));
+    }
+
+    @DeleteMapping("/{id}/members/{userId}")
+    public ResponseEntity<Void> removeMember(@PathVariable Long id, @PathVariable Long userId) {
+        bookClubService.removeMember(id, userId);
         return ResponseEntity.noContent().build();
     }
 }

@@ -14,10 +14,17 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module;
+
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisURI;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.codec.RedisCodec;
+import lombok.val;
 
 @Configuration
 @EnableCaching
@@ -25,12 +32,29 @@ public class RedisConfig {
 
 
     @Bean
-    RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+    RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory,ObjectMapper mapper) {
+        val objectMapper = mapper.copy()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .registerModule(
+                new Hibernate6Module()
+                    .enable(Hibernate6Module.Feature.FORCE_LAZY_LOADING)
+                    .enable(Hibernate6Module.Feature.REPLACE_PERSISTENT_COLLECTIONS)
+            )
+            .activateDefaultTyping(
+                LaissezFaireSubTypeValidator.instance,
+                ObjectMapper.DefaultTyping.NON_FINAL,
+                JsonTypeInfo.As.PROPERTY
+            );
+        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofMinutes(10)) // Cache expiry time
+                .serializeValuesWith(
+                        RedisSerializationContext.SerializationPair.fromSerializer(
+                                new GenericJackson2JsonRedisSerializer(objectMapper)
+                        )
+                );
+
         return RedisCacheManager.builder(redisConnectionFactory)
-                .cacheDefaults(RedisCacheConfiguration.defaultCacheConfig()
-                        .entryTtl(Duration.ofMinutes(10)) // Cache expiry time
-                        .serializeValuesWith(RedisSerializationContext.SerializationPair
-                                .fromSerializer(new GenericJackson2JsonRedisSerializer())))
+                .cacheDefaults(config)
                 .build();
     }
 

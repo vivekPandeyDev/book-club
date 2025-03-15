@@ -1,4 +1,5 @@
 package com.bookhive.dto.club;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BookClubResponseDto {
+public class BookClubResponseDto implements Serializable {
     private Long clubId;
     private String name;
     private String description;
