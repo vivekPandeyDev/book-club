@@ -185,7 +185,8 @@ public class BookClubService {
     @Transactional
     @Caching(evict = {
             @CacheEvict(value = "clubMembers", key = "#clubId"),
-            @CacheEvict(value = "bookClubs", key = "#clubId")
+            @CacheEvict(value = "bookClubs", key = "#clubId"),
+            @CacheEvict(value = "allBookClubs", allEntries = true) 
     })
     public MembershipDto addMember(Long clubId, Long userId) {
         MembershipProjection membershipCheck = membershipRepository.findMembershipAndEntities(clubId, userId);
@@ -222,7 +223,8 @@ public class BookClubService {
     @Transactional
     @Caching(evict = {
             @CacheEvict(value = "clubMembers", key = "#clubId"),
-            @CacheEvict(value = "bookClubs", key = "#clubId")
+            @CacheEvict(value = "bookClubs", key = "#clubId"),
+            @CacheEvict(value = "allBookClubs", allEntries = true) 
     })
     public void removeMember(Long clubId, Long userId) {
         MembershipProjection membershipCheck = membershipRepository.findMembershipAndEntities(clubId, userId);
