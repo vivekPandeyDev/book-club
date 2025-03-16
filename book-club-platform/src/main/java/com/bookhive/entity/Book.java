@@ -1,9 +1,18 @@
 package com.bookhive.entity;
-import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -21,18 +30,18 @@ public class Book {
     private String language;
     private Double rating;
     private Integer publishedYear;
-    @Column(name = "cover_image_url",nullable = false, unique = true, length = 1000)
+    @Column(name = "cover_image_url", nullable = false, unique = true, length = 1000)
     private String coverImageUrl;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    private List<Discussion> discussions;
+    private List<Discussion> discussions = new ArrayList<>();
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    private List<Review> reviews;
+    private List<Review> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    private List<Recommendation> recommendations;
-    
+    private List<Recommendation> recommendations = new ArrayList<>();
+
     @Column(name = "book_url", nullable = false, unique = true, length = 1000)
     private String bookUrl;
 }
