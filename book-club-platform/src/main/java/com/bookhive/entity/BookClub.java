@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -26,8 +27,8 @@ public class BookClub {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "bookClub", cascade = CascadeType.ALL)
-    private List<Membership> memberships;
+    private List<Membership> memberships = new ArrayList<>();
 
     @OneToMany(mappedBy = "bookClub", cascade = CascadeType.ALL)
-    private List<Discussion> discussions;
+    private List<Discussion> discussions = new ArrayList<>();
 }

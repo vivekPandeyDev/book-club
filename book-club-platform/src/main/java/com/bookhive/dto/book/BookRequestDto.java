@@ -34,4 +34,8 @@ public class BookRequestDto {
     @DecimalMin(value = "0.0", inclusive = true, message = "Rating should be at least 0.0")
     @DecimalMax(value = "5.0", inclusive = true, message = "Rating should not exceed 5.0")
     private Double rating;
+
+    @NotBlank(message = "Club name is required")
+    @Size(max = 255, message = "Club name length should not exceed 255 characters")
+    private String clubName ="test-club";
 }

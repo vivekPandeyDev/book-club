@@ -1,29 +1,27 @@
 package com.bookhive;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bookhive.entity.Achievement;
 import com.bookhive.entity.Book;
+import com.bookhive.entity.BookClub;
 import com.bookhive.entity.Follow;
 import com.bookhive.entity.Recommendation;
 import com.bookhive.entity.Review;
 import com.bookhive.entity.User;
-import com.bookhive.repository.AchievementRepository;
-import com.bookhive.repository.BookRepository;
-import com.bookhive.repository.FollowRepository;
-import com.bookhive.repository.RecommendationRepository;
-import com.bookhive.repository.ReviewRepository;
-import com.bookhive.repository.UserRepository;
-
+import com.bookhive.repository.*;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class DataLoader implements CommandLineRunner {
 
+    private final BookClubRepository bookClubRepository;
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
     private final FollowRepository followRepository;
@@ -31,7 +29,10 @@ public class DataLoader implements CommandLineRunner {
     private final ReviewRepository reviewRepository;
     private final RecommendationRepository recommendationRepository;
 
+
+
     @Override
+    @Transactional
     public void run(String... args) {
 
         if (userRepository.count() == 0) {
@@ -70,6 +71,12 @@ public class DataLoader implements CommandLineRunner {
             achievement2.setUser(john);
 
             achievementRepository.saveAll(List.of(achievement1, achievement2));
+            //create book club
+            BookClub bookClub = new BookClub();
+            bookClub.setCreatedAt(LocalDateTime.now());
+            bookClub.setName("test-club");
+            bookClub.setOwner(john);
+            bookClub = bookClubRepository.saveAndFlush(bookClub);
 
             // Create a Book
             Book book = new Book();
@@ -77,8 +84,8 @@ public class DataLoader implements CommandLineRunner {
             book.setAuthor("F. Scott Fitzgerald");
             book.setCoverImageUrl("test ulr");
             book.setBookUrl("test book url");
+            book.setBookClub(bookClub);
             bookRepository.save(book);
-
             // Create a Review for John
             Review review = new Review();
             review.setBook(book);

@@ -45,4 +45,5 @@ public class MinioUtil {
         }
         return filename.substring(filename.lastIndexOf("."));
     }
+
 }

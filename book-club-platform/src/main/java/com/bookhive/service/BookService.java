@@ -1,5 +1,7 @@
 package com.bookhive.service;
 
+import java.util.List;
+
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -8,10 +10,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.bookhive.dto.book.BookRequestDto;
 import com.bookhive.dto.book.BookResponseDto;
+import com.bookhive.dto.page.BookPageDto;
 import com.bookhive.entity.Book;
 import com.bookhive.handler.ResourceFoundException;
+import com.bookhive.repository.BookClubRepository;
 import com.bookhive.repository.BookRepository;
 import com.bookhive.util.BookMapper;
+import com.bookhive.util.BookPageExtractor;
 import com.bookhive.util.MinioUtil;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -23,6 +28,9 @@ import lombok.RequiredArgsConstructor;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final BookPageExtractor bookPageExtractor;
+    private final BookPageService bookPageService;
+    private final BookClubRepository clubRepository;
     private final MinioUtil minioUtil;
 
     /**
@@ -43,6 +51,8 @@ public class BookService {
     
         // Save book details to the database
         book = bookRepository.save(book);
+        List<BookPageDto> bookPages = bookPageExtractor.extractPages(file, book);
+        bookPageService.saveBookPages(bookPages);
         return BookMapper.toDto(book);
     }
     private Book getBook(BookRequestDto dto, String bookUrl, String coverImageUrl) {
@@ -55,6 +65,7 @@ public class BookService {
         book.setRating(dto.getRating());
         book.setCoverImageUrl(coverImageUrl);
         book.setBookUrl(bookUrl);
+        book.setBookClub(clubRepository.findById(1L).get());
         return book;
     }
 
