@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Open Book -->
+  <path d="M10 50 Q32 30, 54 50" stroke="#FFC107" stroke-width="4" fill="none"/>
+  <path d="M10 50 Q32 70, 54 50" stroke="#FFC107" stroke-width="4" fill="none"/>
+  
+  <!-- Hive Hexagons -->
+  <polygon points="32,10 40,15 40,25 32,30 24,25 24,15" fill="#FF9800"/>
+  <polygon points="44,18 52,23 52,33 44,38 36,33 36,23" fill="#FFB300"/>
+  <polygon points="20,18 28,23 28,33 20,38 12,33 12,23" fill="#FFA000"/>
+</svg>
