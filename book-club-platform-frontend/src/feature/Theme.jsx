@@ -6,7 +6,7 @@ const Theme = () => {
   const { setLightTheme, setDarkTheme, isLightTheme, getCurrentTheme } =
     useTheme();
   return (
-    <div className="absolute bottom-10 right-10">
+    <div className="fixed bottom-5 right-5">
       <Button
         variant="ghost"
         size="icon"
