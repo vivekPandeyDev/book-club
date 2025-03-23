@@ -19,4 +19,3 @@ const Banner = ({ bannerMobile, bannerDesktop }) => {
 };
 
 export default Banner;
-
