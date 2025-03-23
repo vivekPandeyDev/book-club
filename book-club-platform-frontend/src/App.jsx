@@ -1,5 +1,5 @@
+import { BaseScreen, BookDetail, Home } from "@/screen/screen";
 import { Route, Routes } from "react-router";
-import {BaseScreen,Home,BookDetail} from "@/screen/screen";
 
 function App() {
   return (

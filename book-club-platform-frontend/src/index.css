@@ -122,11 +122,19 @@
 
 
 @keyframes marquee {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
+  0% { transform: translateX(50%); } /* Default: Start from the middle */
+  100% { transform: translateX(-100%); } /* Move fully to the left */
+}
+
+/* Apply different animation for mobile screens */
+@media (max-width: 768px) {
+  @keyframes marquee {
+    0% { transform: translateX(0%); } /* Mobile: Start from the beginning */
+    100% { transform: translateX(-100%); }
+  }
 }
 
 .animate-marquee {
   display: inline-block;
-  animation: marquee 20s linear infinite; /* Slowed down from 10s to 20s */
+  animation: marquee 20s linear infinite;
 }

@@ -1,5 +1,5 @@
-import Navbar from "@/feature/nav-bar";
-import Theme from "@/feature/Theme";
+import Navbar from "@/feature/nav/nav-bar";
+import Theme from "@/feature/theme/theme";
 import React from "react";
 import { Outlet } from "react-router";
 

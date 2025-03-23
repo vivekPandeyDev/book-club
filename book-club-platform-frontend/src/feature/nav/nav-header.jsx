@@ -23,7 +23,7 @@ const NavHeader = () => {
       </div>
       <IconButtonWithTooltip
         tooltipText="sign-in"
-        children={<LogIn size={isMobile ? 28 : 24} className="text-gray-700" />}
+        children={<LogIn size={isMobile ? 28 : 24} className="text-gray-700 dark:text-white" />}
       />
     </>
   );

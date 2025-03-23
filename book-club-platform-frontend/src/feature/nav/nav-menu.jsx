@@ -3,7 +3,7 @@ import { BookOpen, LayoutGrid } from "lucide-react";
 import { Link } from "react-router";
 const NavMenu = () => {
   return (
-    <nav className="border-b border-primary bg-background py-3">
+    <nav className="border-b border-primary bg-background py-3 dark:bg-transparent">
       <NavigationMenu>
         <NavigationMenuList className="flex justify-center gap-6">
           <NavigationMenuItem>

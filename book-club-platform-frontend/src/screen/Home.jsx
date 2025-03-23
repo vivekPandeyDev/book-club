@@ -7,26 +7,58 @@ import {
   whiteNight,
 } from "@/assets/books/book-export";
 import { Card } from "@/components/ui/card";
-import AnnouncementBar from "@/components/ui/custom/announcement-bar";
-import Banner from "@/components/ui/custom/Banner";
-import BookCarousel from "@/components/ui/custom/book-carousel";
+import AnnouncementBar from "@/feature/announcement-bar/announcement-bar";
+import Banner from "@/feature/banner/banner";
+import BookCarousel from "@/feature/carousel/book/book-carousel";
 
 const Home = () => {
   const books = [
     {
-      title:
-        "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vero placeat delectus sunt, aliquam nesciunt quo possimus alias sapiente voluptas eum.",
-      imageUrl: dreamWalker,
-      time: "32 minutes ago",
+      title: "Severance",
+      image: dreamWalker,
+      description:
+        "A psychological thriller about employees at Lumon Industries...",
+      rating: "8.7",
+      genres: ["Psychological Thriller", "Science Fiction"],
     },
-    { title: "Fairy Tail", imageUrl: killingComplex, time: "1 hour ago" },
-    { title: "Honkai Impact", imageUrl: personalGrowth, time: "2 hours ago" },
-    { title: "Super God", imageUrl: whiteNight, time: "32 minutes ago" },
-    { title: "Fairy Tail", imageUrl: killingComplex, time: "1 hour ago" },
-    { title: "Honkai Impact", imageUrl: personalGrowth, time: "2 hours ago" },
+    {
+      title: "Dream Walker",
+      image: killingComplex,
+      description: "A fantasy adventure with magic and mystery.",
+      rating: "7.9",
+      genres: ["Fantasy", "Adventure"],
+    },
+    {
+      title: "The Killing Complex",
+      image: personalGrowth,
+      description: "A gripping crime thriller with shocking twists.",
+      rating: "8.5",
+      genres: ["Crime", "Thriller"],
+    },
+    {
+      title: "White Nights",
+      image: whiteNight,
+      description: "A romantic drama set in a cold winter landscape.",
+      rating: "7.5",
+      genres: ["Romance", "Drama"],
+    },
+    {
+      title: "The Killing Complex",
+      image: personalGrowth,
+      description: "A gripping crime thriller with shocking twists.",
+      rating: "8.5",
+      genres: ["Crime", "Thriller"],
+    },
+    {
+      title: "White Nights",
+      image: whiteNight,
+      description: "A romantic drama set in a cold winter landscape.",
+      rating: "7.5",
+      genres: ["Romance", "Drama"],
+    },
   ];
   return (
-    <div>
+    <>
       <div>
         <Card className="w-full shadow-none border-none">
           <Banner bannerDesktop={bannerDesktop} bannerMobile={bannerMobile} />
@@ -34,10 +66,10 @@ const Home = () => {
       </div>
       <AnnouncementBar message="Our site is in beta. If you're an author or translator, contact us." />
 
-      <div className="p-12">
+      <div>
         <BookCarousel books={books} heading="Recently Added" />
       </div>
-    </div>
+    </>
   );
 };
 
