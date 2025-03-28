@@ -81,6 +81,7 @@ const Home = () => {
       <BookCarousel books={books} heading="Recently Added" link={"/more"} />
       <MostReadBooks />
       <RecentReviews/>
+      <BookCarousel books={books} heading="Recently Completed" link={"/more"} />
     </>
   );
 };

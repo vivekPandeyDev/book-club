@@ -1,3 +1,4 @@
+import Footer from "@/feature/footer/footer";
 import Navbar from "@/feature/nav/nav-bar";
 import Theme from "@/feature/theme/theme";
 import { Outlet } from "react-router";
@@ -9,6 +10,7 @@ const BaseScreen = () => {
       <div className="container mx-auto px-4 lg:max-w-8/12">
         <Outlet />
       </div>
+      <Footer/>
       <Theme/>
     </div>
   );

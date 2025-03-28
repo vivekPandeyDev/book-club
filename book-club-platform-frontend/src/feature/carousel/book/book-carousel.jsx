@@ -8,12 +8,12 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import BookCard from "./book-card";
 
-const BookCarousel = ({ books, link }) => {
+const BookCarousel = ({ books, link,heading }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   return (
     <div className="w-full mx-auto px-4 py-8">
       <div className="flex justify-between border-b border-gray-700">
-        <h2 className="text-lg font-semibold  mb-4">Recently Added</h2>
+        <h2 className="text-lg font-semibold  mb-4">{heading}</h2>
         <Button className="underline" variant="link">
           <Link to={link}>More</Link>
         </Button>

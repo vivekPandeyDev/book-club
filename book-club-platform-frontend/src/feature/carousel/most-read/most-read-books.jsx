@@ -153,7 +153,7 @@ export default function MostReadBooks() {
 
 
       {/* Book List */}
-      <div className="mt-4 grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-5 lg:gap-6 overflow-x-auto justify-center align-middle">
+      <div className="mt-4 grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-5 lg:gap-6 overflow-x-none justify-center align-middle">
         {books.map((book) => (
           <div
             key={book.id}
