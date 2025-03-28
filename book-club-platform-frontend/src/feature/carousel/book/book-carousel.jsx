@@ -1,27 +1,31 @@
-
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { Link } from "react-router";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 import BookCard from "./book-card";
-import { useState } from "react";
 
-
-
-
-const BookCarousel = ({books}) => {
+const BookCarousel = ({ books, link }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   return (
     <div className="w-full mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold  mb-4">Recently Added</h2>
+      <div className="flex justify-between">
+        <h2 className="text-lg font-semibold  mb-4">Recently Added</h2>
+        <Button className="underline" variant="link">
+          <Link to={link}>More</Link>
+        </Button>
+      </div>
+      <hr class="border-t-3 border-yellow-400 my-4"></hr>
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={10}
         slidesPerView={1}
         breakpoints={{
-          320: { slidesPerView: 1.5},
-          768: { slidesPerView: 2.5 },
+          320: { slidesPerView: 1.5 },
+          768: { slidesPerView: 3.5 },
           1024: { slidesPerView: 4.5 },
           1280: { slidesPerView: 5.5 },
         }}
@@ -40,6 +44,5 @@ const BookCarousel = ({books}) => {
     </div>
   );
 };
-
 
 export default BookCarousel;

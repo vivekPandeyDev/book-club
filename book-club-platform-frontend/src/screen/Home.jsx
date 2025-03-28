@@ -10,6 +10,7 @@ import { Card } from "@/components/ui/card";
 import AnnouncementBar from "@/feature/announcement-bar/announcement-bar";
 import Banner from "@/feature/banner/banner";
 import BookCarousel from "@/feature/carousel/book/book-carousel";
+import MostReadBooks from "@/feature/carousel/most-read/most-read-books";
 
 const Home = () => {
   const books = [
@@ -19,14 +20,24 @@ const Home = () => {
       description:
         "A psychological thriller about employees at Lumon Industries...",
       rating: "8.7",
-      genres: ["Psychological Thriller", "Science Fiction"],
+      genres: [
+        "Psychological",
+        "Science",
+        "Psychological Thriller",
+        "Science Fiction",
+      ],
     },
     {
       title: "Dream Walker",
       image: killingComplex,
       description: "A fantasy adventure with magic and mystery.",
       rating: "7.9",
-      genres: ["Fantasy", "Adventure"],
+      genres: [
+        "Psychological Thriller",
+        "Science Fiction",
+        "Psychological Thriller",
+        "Science Fiction",
+      ],
     },
     {
       title: "The Killing Complex",
@@ -66,9 +77,8 @@ const Home = () => {
       </div>
       <AnnouncementBar message="Our site is in beta. If you're an author or translator, contact us." />
 
-      <div>
-        <BookCarousel books={books} heading="Recently Added" />
-      </div>
+      <BookCarousel books={books} heading="Recently Added" link={"/more"} />
+      <MostReadBooks />
     </>
   );
 };

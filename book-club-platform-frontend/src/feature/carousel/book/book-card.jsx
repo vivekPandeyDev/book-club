@@ -1,14 +1,14 @@
 import { motion } from "framer-motion";
 
-const BookCard = ({ book , isActive}) => {
+const BookCard = ({ book, isActive }) => {
   return (
-    <motion.div 
-    className="bg-gray-900 text-white shadow-lg  sm:max-w-[300px] rounded-2xl sm:rounded-tl-[40px] sm:rounded-br-[40px] sm:rounded-bl-2xl rounded-tr-xl overflow-hidden"
-    animate={{
-      scale: isActive ? 0.95 : 1,  
-      opacity: isActive ? 1 : 0.9, 
-    }}
-    transition={{ duration: 0.4 }}  
+    <motion.div
+      className="bg-gray-900 text-white shadow-lg  sm:max-w-[300px] rounded-2xl sm:rounded-tl-[40px] sm:rounded-br-[40px] sm:rounded-bl-2xl rounded-tr-xl overflow-hidden"
+      animate={{
+        scale: isActive ? 0.95 : 1,
+        opacity: isActive ? 1 : 0.9,
+      }}
+      transition={{ duration: 0.4 }}
     >
       <div className="relative">
         {/* Large Image */}
@@ -43,7 +43,7 @@ const BookCard = ({ book , isActive}) => {
 
           {/* Genres (Always Visible) */}
           <motion.div
-            className="mt-2 flex flex-wrap gap-2"
+            className="mt-2 flex flex-wrap gap-2 max-h-32"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, delay: 0.5 }}

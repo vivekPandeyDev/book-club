@@ -13,7 +13,7 @@ const Banner = ({ bannerMobile, bannerDesktop }) => {
     <img
       src={banner}
       alt="BookHive Banner"
-      className="w-full object-fill h-[300px] md:h-80 lg:h-[550px]"
+      className="w-full object-fill h-[300px] md:h-80 lg:h-[350px] rounded-2xl"
     />
   );
 };

@@ -138,3 +138,7 @@
   display: inline-block;
   animation: marquee 20s linear infinite;
 }
+
+html, body {
+  overflow-x: hidden;
+}
