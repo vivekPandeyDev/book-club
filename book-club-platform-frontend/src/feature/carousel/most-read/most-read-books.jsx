@@ -131,7 +131,7 @@ export default function MostReadBooks() {
   return (
     <div className="p-6 rounded-lg">
       {/* Header */}
-      <div className="flex justify-between items-center gap-1">
+      <div className="flex justify-between items-center gap-1 border-b border-gray-700 p-2">
         <h2 className="text-lg font-semibold shrink-0">Most Read Books</h2>
         <div className="flex gap-2 overflow-x-auto">
           {filters.map((filter) => (
@@ -150,7 +150,7 @@ export default function MostReadBooks() {
           ))}
         </div>
       </div>
-      <hr class="border-t-3 border-yellow-400 my-4"></hr>
+
 
       {/* Book List */}
       <div className="mt-4 grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-5 lg:gap-6 overflow-x-auto justify-center align-middle">

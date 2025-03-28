@@ -11,6 +11,7 @@ import AnnouncementBar from "@/feature/announcement-bar/announcement-bar";
 import Banner from "@/feature/banner/banner";
 import BookCarousel from "@/feature/carousel/book/book-carousel";
 import MostReadBooks from "@/feature/carousel/most-read/most-read-books";
+import RecentReviews from "@/feature/carousel/recent-review/recent-review";
 
 const Home = () => {
   const books = [
@@ -79,6 +80,7 @@ const Home = () => {
 
       <BookCarousel books={books} heading="Recently Added" link={"/more"} />
       <MostReadBooks />
+      <RecentReviews/>
     </>
   );
 };

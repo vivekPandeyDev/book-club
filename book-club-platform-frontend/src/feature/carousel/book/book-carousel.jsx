@@ -12,13 +12,12 @@ const BookCarousel = ({ books, link }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   return (
     <div className="w-full mx-auto px-4 py-8">
-      <div className="flex justify-between">
+      <div className="flex justify-between border-b border-gray-700">
         <h2 className="text-lg font-semibold  mb-4">Recently Added</h2>
         <Button className="underline" variant="link">
           <Link to={link}>More</Link>
         </Button>
       </div>
-      <hr class="border-t-3 border-yellow-400 my-4"></hr>
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={10}
@@ -32,7 +31,7 @@ const BookCarousel = ({ books, link }) => {
         pagination={{ clickable: true }}
         autoplay={{ delay: 4000 }}
         loop={true}
-        className="pb-8"
+        className="pb-8 mt-2"
         onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
       >
         {books.map((book, index) => (
