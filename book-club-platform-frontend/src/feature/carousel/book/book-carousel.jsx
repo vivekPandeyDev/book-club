@@ -11,11 +11,11 @@ import BookCard from "./book-card";
 const BookCarousel = ({ books, link,heading }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   return (
-    <div className="w-full mx-auto px-4 py-8">
+    <div className="w-full px-4 py-8">
       <div className="flex justify-between border-b border-gray-700">
         <h2 className="text-lg font-semibold  mb-4">{heading}</h2>
         <Button className="underline" variant="link">
-          <Link to={link}>More</Link>
+          <Link to={link} className="text-violet-700">More</Link>
         </Button>
       </div>
       <Swiper
@@ -31,7 +31,7 @@ const BookCarousel = ({ books, link,heading }) => {
         pagination={{ clickable: true }}
         autoplay={{ delay: 4000 }}
         loop={true}
-        className="pb-8 mt-2"
+        className="mt-2"
         onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
       >
         {books.map((book, index) => (

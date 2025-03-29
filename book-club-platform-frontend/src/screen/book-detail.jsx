@@ -1,11 +1,15 @@
 import { whiteNight } from "@/assets/books/book-export";
 import { Button } from "@/components/ui/button";
 import SpanTag from "@/components/ui/custom/span-tag";
+import SimilarBook from "@/feature/carousel/book-grid/book-grid";
+import BookDiscussion from "@/feature/discussion/book-discussion";
+import BookReviews from "@/feature/review/book-review";
 import TableContent from "@/feature/table-content/table-content";
 import TabNavigation from "@/feature/tabs/tab";
 import { GetStarRating } from "@/feature/util/start-util";
+import { books } from "@/lib/db";
+import { useState } from "react";
 import { useParams } from "react-router";
-
 function GetTagList({ tags }) {
   return (
     <>
@@ -15,21 +19,18 @@ function GetTagList({ tags }) {
     </>
   );
 }
+
+const TABLE_OF_CONTENT = "Table of Contents";
+const BOOK_DISCUSSION = "Book Discussion";
+const BOOK_REVIEW = "Book Reviews";
+const SIMILAR_BOOK = "Similar Book";
+
+
+const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)]
 const BookDetail = () => {
   const { name } = useParams();
-  console.log("name", name);
-  const book = {
-    name: "Harry Potter and the Sorcerer’s Stone",
-    author: "J.K. Rowling",
-    rating: 4.9,
-    bookmarked: 1050000,
-    lastUpdated: "about 2 days ago",
-    genres: ["Fantasy", "Adventure"],
-    tags: ["Magic", "Wizards", "Coming-of-Age"],
-    status: "Completed",
-    wordCount: "77K",
-    image: whiteNight, // Update with actual image reference
-  };
+  const [activeTab, setActiveTab] = useState(TABLE_OF_CONTENT);
+  const book = getRandomElement(books)
 
   return (
     <div className="mt-6 mb-6">
@@ -38,8 +39,9 @@ const BookDetail = () => {
         <div className="flex justify-center lg:justify-start">
           <img
             src={book.image}
-            alt="Global Job Change: Necromancer! I Am a Catastrophe"
+            alt={book.name}
             className="w-full lg:w-80 rounded-lg"
+            draggable={false}
           />
         </div>
 
@@ -91,8 +93,11 @@ const BookDetail = () => {
           </div>
         </div>
       </div>
-      <TabNavigation/>
-      <TableContent/>
+      <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+      {activeTab === TABLE_OF_CONTENT && <TableContent />}
+      {activeTab === BOOK_DISCUSSION && <BookDiscussion />}
+      {activeTab === BOOK_REVIEW && <BookReviews/>}
+      {activeTab == SIMILAR_BOOK && <SimilarBook books={books}/>}
     </div>
   );
 };

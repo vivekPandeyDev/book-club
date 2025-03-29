@@ -7,47 +7,8 @@ import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { dreamWalker } from "@/assets/books/book-export";
-const reviews = [
-  {
-    username: "josephnzareno1",
-    rating: 4.6,
-    title:
-      "Korean Drama: More Children More Happiness, Sister-in-law is Broken",
-    review: "Good novel. More more more more more more more...",
-  },
-  {
-    username: "ysghsgsh",
-    rating: 5,
-    title: "Demon Slayer: God-Level Support System",
-    review:
-      "Short and good story. He doesn't have his own breathing, but I enjoyed reading this...",
-  },
-  {
-    username: "iworkshop",
-    rating: 3,
-    title:
-      "Basic Attacks Permanently Increase HP, This Archer Is Tanky as Hell!",
-    review:
-      "Confusing. It started off well, but the further you go, the more nonsense...",
-  },
-  {
-    username: "ysghsgsh",
-    rating: 5,
-    title: "Demon Slayer: God-Level Support System",
-    review:
-      "Short and good story. He doesn't have his own breathing, but I enjoyed reading this...",
-  },
-  {
-    username: "iworkshop",
-    rating: 3,
-    title:
-      "Basic Attacks Permanently Increase HP, This Archer Is Tanky as Hell!",
-    review:
-      "Confusing. It started off well, but the further you go, the more nonsense...",
-  },
-];
 
-export default function RecentReviews() {
+export default function RecentReviews({ reviews }) {
   return (
     <div className="p-6 rounded-lg">
       <div className="flex w-full border-b border-gray-700 p-2">
@@ -84,7 +45,7 @@ export default function RecentReviews() {
           >
             <div className="flex items-center gap-3">
               <Avatar className="w-12 h-12">
-                <AvatarImage src={dreamWalker}/>
+                <AvatarImage src={review.avatar} />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
 
@@ -93,9 +54,10 @@ export default function RecentReviews() {
                 <GetStarRating rating={review.rating} color={"text-red-500"} />
               </div>
             </div>
+
             <h4 className="m-2 font-semibold">{review.title}</h4>
             <p className="text-sm text-gray-700 dark:text-gray-100 mt-4">
-              {review.review}
+              {review.content}
             </p>
           </SwiperSlide>
         ))}
