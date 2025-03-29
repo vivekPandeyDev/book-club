@@ -1,12 +1,15 @@
+import { getBookLink } from '@/lib/book'
 import React from 'react'
+import { NavLink } from 'react-router'
 
 const BookGrid = ({books}) => {
   return (
     <div className="mt-4 grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-5 lg:gap-6 overflow-x-none justify-center align-middle">
     {books.map((book,index) => (
-      <div
+      <NavLink
         key={book.id}
         className="w-36 sm:w-52 shrink-0 place-items-center 2xl:place-items-stretch mt-2"
+        to={getBookLink(book.name,book.clubName)}
       >
         {/* Book Image */}
         <div className="relative">
@@ -33,7 +36,7 @@ const BookGrid = ({books}) => {
           {book.name}
         </p>
         </div>
-      </div>
+      </NavLink>
     ))}
   </div>
   )

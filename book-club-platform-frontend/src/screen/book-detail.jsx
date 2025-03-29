@@ -6,9 +6,11 @@ import BookReviews from "@/feature/review/book-review";
 import TableContent from "@/feature/table-content/table-content";
 import TabNavigation from "@/feature/tabs/tab";
 import { GetStarRating } from "@/feature/util/start-util";
+import { convertToUnderscore, getBookLink, getBookReadingLink } from "@/lib/book";
 import { books, reviews } from "@/lib/db";
 import { useState } from "react";
-import { useParams } from "react-router";
+import { NavLink, useParams } from "react-router";
+
 function GetTagList({ tags }) {
   return (
     <>
@@ -24,12 +26,14 @@ const BOOK_DISCUSSION = "Book Discussion";
 const BOOK_REVIEW = "Book Reviews";
 const SIMILAR_BOOK = "Similar Book";
 
-
-const getRandomElement = (arr) => arr[Math.floor(Math.random() * arr.length)]
 const BookDetail = () => {
-  const { name } = useParams();
+  const { clubName, bookName } = useParams();
   const [activeTab, setActiveTab] = useState(TABLE_OF_CONTENT);
-  const book = getRandomElement(books)
+  const book = books.find(
+    (book) =>
+      convertToUnderscore(book.name) == bookName &&
+      convertToUnderscore(book.clubName) == clubName
+  );
 
   return (
     <div className="mt-6 mb-6">
@@ -83,9 +87,9 @@ const BookDetail = () => {
           </div>
 
           <div className="mt-5 flex justify-center lg:justify-start gap-3">
-            <Button className="bg-yellow-500 px-5 py-2 rounded-lg text-black dark:text-white dark:bg-amber-600">
+            <NavLink className="bg-yellow-500 px-5 py-2 rounded-lg text-black dark:text-white dark:bg-amber-600" to={getBookReadingLink(book.name,book.clubName)}>
               📖 Read Now
-            </Button>
+            </NavLink>
             <Button className="border bg-yellow-500  px-5 py-2 rounded-lg text-black dark:text-white dark:bg-amber-600">
               🔖 Bookmark
             </Button>
@@ -95,8 +99,8 @@ const BookDetail = () => {
       <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
       {activeTab === TABLE_OF_CONTENT && <TableContent />}
       {activeTab === BOOK_DISCUSSION && <BookDiscussion />}
-      {activeTab === BOOK_REVIEW && <BookReviews reviews={reviews}/>}
-      {activeTab == SIMILAR_BOOK && <SimilarBook books={books}/>}
+      {activeTab === BOOK_REVIEW && <BookReviews reviews={reviews} />}
+      {activeTab == SIMILAR_BOOK && <SimilarBook books={books} />}
     </div>
   );
 };

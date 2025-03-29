@@ -18,7 +18,7 @@ const Home = () => {
       <AnnouncementBar message="Our site is in beta. If you're an author or translator, contact us." />
       <BookCarousel books={books} heading="Recently Added" link={"/more"} />
       <MostReadBooks books={books} />
-      <RecentReviews reviews={reviews}/>
+      <RecentReviews reviews={reviews} />
       <BookCarousel books={books} heading="Recently Completed" link={"/more"} />
     </>
   );

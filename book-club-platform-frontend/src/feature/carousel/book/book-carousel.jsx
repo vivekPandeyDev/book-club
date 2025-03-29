@@ -1,12 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import BookCard from "./book-card";
+import { getBookLink } from "@/lib/book";
 
 const BookCarousel = ({ books, link,heading }) => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -36,7 +37,9 @@ const BookCarousel = ({ books, link,heading }) => {
       >
         {books.map((book, index) => (
           <SwiperSlide key={index}>
+            <NavLink to={getBookLink(book.name,book.clubName)}>
             <BookCard book={book} isActive={index === activeIndex} />
+            </NavLink>
           </SwiperSlide>
         ))}
       </Swiper>

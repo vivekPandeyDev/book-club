@@ -8,9 +8,15 @@ function App() {
       <Routes>
         <Route element={<BaseScreen />}>
           <Route index element={<Home />} />
-          <Route path="/detail/:name" element={<BookDetail />} />
+          <Route
+            path="/book-detail/:clubName/:bookName"
+            element={<BookDetail />}
+          />
+          <Route
+            path="/book-reader/:clubName/:bookName"
+            element={<BookReader />}
+          />
         </Route>
-        <Route path="/reader" element={<BookReader />} />
       </Routes>
     </>
   );
