@@ -29,7 +29,7 @@ const BookCarousel = ({ books, link,heading }) => {
           1280: { slidesPerView: 5.5 },
         }}
         pagination={{ clickable: true }}
-        autoplay={{ delay: 4000 }}
+        autoplay={{ delay: 2000 }}
         loop={true}
         className="mt-2"
         onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
