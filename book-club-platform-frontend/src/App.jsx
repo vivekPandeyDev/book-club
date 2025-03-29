@@ -6,11 +6,11 @@ function App() {
   return (
     <>
       <Routes>
-        <Route  element={<BaseScreen />}>
+        <Route element={<BaseScreen />}>
           <Route index element={<Home />} />
-          <Route path="/detail/:name" element={<BookDetail/>}/>
-          <Route path="/reader" element={<BookReader/>}/>
+          <Route path="/detail/:name" element={<BookDetail />} />
         </Route>
+        <Route path="/reader" element={<BookReader />} />
       </Routes>
     </>
   );

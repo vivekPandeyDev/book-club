@@ -96,7 +96,7 @@ export default function BookReader() {
   const prevPage = () => setPage((p) => Math.max(p - 1, 0));
 
   return (
-    <div ref={readerRef} className={`flex flex-col transition-all`}>
+    <div ref={readerRef} className="flex flex-col transition-all lg:max-w-6xl mx-auto">
       <h1 className="text-2xl font-bold mt-2">Book Reader 📖</h1>
 
       {/* Settings Bar */}
@@ -106,7 +106,7 @@ export default function BookReader() {
             className="w-5 h-5 cursor-pointer"
             onClick={() => setFontSize((size) => Math.max(size - 2, 12))}
           />
-          <span className="text-lg">Font Size: {fontSize}px</span>
+          <span className="text-sm">Font Size: {fontSize}px</span>
           <Plus
             className="w-5 h-5 cursor-pointer"
             onClick={() => setFontSize((size) => Math.min(size + 2, 30))}
@@ -116,10 +116,10 @@ export default function BookReader() {
         <select
           value={fontFamily}
           onChange={(e) => setFontFamily(e.target.value)}
-          className="px-2 py-1 border rounded text-gray-900 dark:text-gray-50"
+          className="px-2 py-1 border rounded text-sm"
         >
           {fontFamilies.map((font) => (
-            <option key={font} value={font} className="bg-gray-700 text-white">
+            <option key={font} value={font}>
               {font}
             </option>
           ))}
@@ -130,19 +130,17 @@ export default function BookReader() {
         </Button>
       </div>
 
-      {/* Book Content with Fixed Height & Scroll */}
-      <Card className="w-full  p-6 shadow-lg">
-        <CardContent
-          className="text-lg overflow-y-auto w-full h-[400px] lg:h-[500px]"
+      <div className="w-full p-6 overflow-x-hidden">
+        <div
+          className="overflow-y-auto h-[700px] lg:h-[700px]"
           style={{
             fontSize: `${fontSize}px`,
             fontFamily,
-            padding: "10px",
             lineHeight: "1.6",
           }}
         >
           {bookPages[page]}
-        </CardContent>
+        </div>
         {/* Navigation */}
         <div className="flex justify-between mt-6">
           <Button onClick={prevPage} disabled={page === 0}>
@@ -155,7 +153,7 @@ export default function BookReader() {
             Next →
           </Button>
         </div>
-      </Card>
+      </div>
     </div>
   );
 }
