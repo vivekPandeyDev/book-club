@@ -6,7 +6,6 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { dreamWalker } from "@/assets/books/book-export";
 
 export default function RecentReviews({ reviews }) {
   return (

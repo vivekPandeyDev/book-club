@@ -33,7 +33,7 @@ const discussions = [
         content: "IKR, there are rarely any new ideas. That goes for Korean & Japanese novels too. Just add a twist, at least!"
       },
       {
-        id: 21,
+        id: 22,
         username: "readingmaniac",
         time: "about 2 hours ago",
         avatar: "RM",

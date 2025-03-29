@@ -1,12 +1,11 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { reviews } from "@/lib/db";
 import { GetStarRating } from "../util/start-util";
 
 
 
-export default function BookReviews() {
+export default function BookReviews({reviews}) {
   return (
     <>
       <Button className="my-4 bg-amber-400 text-gray-900 dark:text-gray-700">
@@ -17,6 +16,7 @@ export default function BookReviews() {
           <Card key={review.id}>
             <CardHeader className="flex flex-row items-center gap-4">
               <Avatar>
+                <AvatarImage src={review.avatar} />
                 <AvatarFallback>{review.avatar}</AvatarFallback>
               </Avatar>
               <div>

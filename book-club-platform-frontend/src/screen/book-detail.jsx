@@ -1,4 +1,3 @@
-import { whiteNight } from "@/assets/books/book-export";
 import { Button } from "@/components/ui/button";
 import SpanTag from "@/components/ui/custom/span-tag";
 import SimilarBook from "@/feature/carousel/book-grid/book-grid";
@@ -7,7 +6,7 @@ import BookReviews from "@/feature/review/book-review";
 import TableContent from "@/feature/table-content/table-content";
 import TabNavigation from "@/feature/tabs/tab";
 import { GetStarRating } from "@/feature/util/start-util";
-import { books } from "@/lib/db";
+import { books, reviews } from "@/lib/db";
 import { useState } from "react";
 import { useParams } from "react-router";
 function GetTagList({ tags }) {
@@ -96,7 +95,7 @@ const BookDetail = () => {
       <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
       {activeTab === TABLE_OF_CONTENT && <TableContent />}
       {activeTab === BOOK_DISCUSSION && <BookDiscussion />}
-      {activeTab === BOOK_REVIEW && <BookReviews/>}
+      {activeTab === BOOK_REVIEW && <BookReviews reviews={reviews}/>}
       {activeTab == SIMILAR_BOOK && <SimilarBook books={books}/>}
     </div>
   );
