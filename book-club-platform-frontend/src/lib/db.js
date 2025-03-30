@@ -24,13 +24,6 @@ const randomTimes = [
   "over 1 year ago",
 ];
 
-export const chapters = Array.from({ length: 88 }, (_, i) => ({
-  id: i + 1,
-  title: `Chapter ${i + 1}: ${
-    randomTitles[Math.floor(Math.random() * randomTitles.length)]
-  }`,
-  time: randomTimes[Math.floor(Math.random() * randomTimes.length)],
-}));
 
 import {
   dreamWalker,
@@ -414,3 +407,12 @@ India’s diverse culture, rich history, and burgeoning economy make it a focal 
     ],
   },
 ];
+
+
+export const chapters = Array.from({ length: 88 }, (_, i) => ({
+  id: i + 1,
+  title: `Chapter ${i + 1}: ${
+    randomTitles[Math.floor(Math.random() * randomTitles.length)]
+  }`,
+  time: randomTimes[Math.floor(Math.random() * randomTimes.length)],
+}));

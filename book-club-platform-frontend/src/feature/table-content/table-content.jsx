@@ -22,6 +22,7 @@ const columns = [
 ];
 
 export default function ChapterList() {
+  console.log("chapter",chapters)
   const table = useReactTable({
     data: chapters,
     columns,
