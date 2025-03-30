@@ -42,6 +42,9 @@ public class User implements Serializable {
     // optional user details
     private String profileUrl;
 
+    @Column(nullable = false)
+    private String gender;
+
     private String bio;
 
     private String lastName;

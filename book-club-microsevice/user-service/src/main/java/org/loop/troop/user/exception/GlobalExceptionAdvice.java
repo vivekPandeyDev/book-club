@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @Slf4j
@@ -28,14 +30,34 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError<String> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        final var errors = new HashMap<String, String>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
+        Map<String, String> errors = ex.getBindingResult().getFieldErrors()
+                .stream()
+                .collect(Collectors.toMap(
+                        FieldError::getField,
+                        error -> error.getDefaultMessage()!= null ? error.getDefaultMessage() : "Invalid input",
+                        (existing, replacement) -> existing));
+
+        Map<String, Object> response = Map.of(
+                "status", HttpStatus.BAD_REQUEST.value(),
+                "message", "Validation failed",
+                "errors", errors);
+        logMessage(ex.getMessage());
         return new ApiError<>(false, HttpStatus.BAD_REQUEST, errors, "Validation error, invalid field value passed");
     }
+
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<Map<String, Object>> handlePropertyReferenceException(PropertyReferenceException ex,
+                                                                                HttpServletRequest request) {
+        Map<String, Object> errorDetails = new HashMap<>();
+        errorDetails.put("status", HttpStatus.BAD_REQUEST.value());
+        errorDetails.put("error", HttpStatus.BAD_REQUEST.getReasonPhrase());
+        errorDetails.put("message", "Invalid sorting property: " + ex.getPropertyName());
+        errorDetails.put("path", request.getRequestURI());
+        errorDetails.put("timestamp", LocalDateTime.now());
+
+        return ResponseEntity.badRequest().body(errorDetails);
+    }
+
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -65,18 +87,6 @@ public class GlobalExceptionAdvice {
     ProblemDetail handleResourceNotFound(NotFoundException ex, HttpServletRequest request) {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
         problemDetail.setTitle("CANNOT FIND RESOURCE");
-        problemDetail.setType(
-                ServletUriComponentsBuilder.fromRequestUri(request).replacePath(null).path("error").build().toUri());
-        problemDetail.setProperties(Map.of(MESSAGE, ex.getMessage()));
-        logMessage(ex.getMessage());
-        return problemDetail;
-    }
-
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    ProblemDetail generalException(Exception ex, HttpServletRequest request) {
-        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-        problemDetail.setTitle("Oops!!!! Something went wrong.");
         problemDetail.setType(
                 ServletUriComponentsBuilder.fromRequestUri(request).replacePath(null).path("error").build().toUri());
         problemDetail.setProperties(Map.of(MESSAGE, ex.getMessage()));
