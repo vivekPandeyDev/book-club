@@ -1,3 +1,4 @@
+
 services:
 
   minio:
@@ -16,7 +17,7 @@ services:
       - app_global
       
   postgresql:
-    image: postgres
+    image: postgres:16
     restart: always
     ports:
       - "5432:5432"
@@ -32,7 +33,7 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:24.0.5
     ports:
-      - "9090:8080"
+      - "9090:${KEYCLOAK_PORT}"
     environment:
       KEYCLOAK_LOGLEVEL: TRACE
       JAVA_OPTS: "-agentlib:jdwp=transport=dt_socket,address=8787,server=y,suspend=n"
@@ -100,6 +101,56 @@ services:
       - STORAGE_TYPE=mem
     networks:
       - app_global
+
+  config-service:
+    build:
+      context: .
+      dockerfile: config-service/Dockerfile
+    ports:
+      - "${CONFIG_SERVICE_PORT}:${CONFIG_SERVICE_PORT}"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SERVER_PORT: ${CONFIG_SERVICE_PORT}
+      SPRING_EUREKA_CLIENT_URL: ${SPRING_EUREKA_CLIENT_URL}
+    depends_on:
+      - registry-service
+      - zipkin
+    networks:
+      - app_global
+
+  registry-service:
+    build:
+      context: .
+      dockerfile: registry-service/Dockerfile
+    ports:
+      - "${REGISTRY_SERVICE_PORT}:${REGISTRY_SERVICE_PORT}"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SERVER_PORT: ${REGISTRY_SERVICE_PORT}
+      EUREKA_HOSTNAME: ${EUREKA_HOSTNAME}
+    networks:
+      - app_global
+
+  gateway-service:
+    build:
+      context: .
+      dockerfile: gateway-service/Dockerfile
+    ports:
+      - "${GATEWAY_SERVICE_PORT}:${GATEWAY_SERVICE_PORT}"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SERVER_PORT: ${GATEWAY_SERVICE_PORT}
+      SPRING_EUREKA_CLIENT_URL: ${SPRING_EUREKA_CLIENT_URL}
+      SPRING_CLOUD_CONFIG_URI: ${SPRING_CLOUD_CONFIG_URI}
+      JWT_ISSUER_URI: ${JWT_ISSUER_URI}
+      JWT_RESOURCE_ID: ${JWT_RESOURCE_ID}
+      OPEN_ID_HOST: ${OPEN_ID_HOST}
+      OPEN_ID_PORT: ${OPEN_ID_PORT}
+      JWT_RESOURCE_SECRET: ${JWT_RESOURCE_SECRET}
+    networks:
+      - app_global
+    depends_on:
+      - registry-service
 
 networks:
   app_global:

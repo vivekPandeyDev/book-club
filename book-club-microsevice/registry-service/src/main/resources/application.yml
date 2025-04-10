@@ -15,6 +15,6 @@ eureka:
         enableSelfPreservation: true
         evictionIntervalTimerInMs: 60000
     instance:
-        hostname: localhost
+        hostname: ${EUREKA_HOSTNAME:localhost}
         leaseRenewalIntervalInSeconds: 30
         leaseExpirationDurationInSeconds: 90

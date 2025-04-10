@@ -1,1 +1,1 @@
-EUREKA_BASE_URL=http://localhost:8761;JWT_ISSUER_URI=http://localhost:9090/realms/auth-server;JWT_RESOURCE_ID=spring-cli;OPEN_ID_HOST=localhost;JWT_RESOURCE_SECRET=CpTr5fOknbh8D7GUaHikVw5QaNVPabwk
+EUREKA_BASE_URL=http://localhost:8761;JWT_ISSUER_URI=http://localhost:9090/realms/auth-server;JWT_RESOURCE_ID=spring-cli;JWT_RESOURCE_SECRET=CpTr5fOknbh8D7GUaHikVw5QaNVPabwk;OPEN_ID_HOST=localhost;SPRING_EUREKA_CLIENT_URL=http://localhost:8761/eureka/
